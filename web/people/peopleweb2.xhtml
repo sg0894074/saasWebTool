@@ -82,9 +82,9 @@
                     </p:column>
                     <p:column headerText="Options" style="width:50px">  
                         <p:rowEditor />  
+                        <p:commandButton icon="ui-icon-trash" actionListener="#{peopleController.onDelete}" update=":form:growl"/>
                     </p:column>  
                 </p:dataTable>
-
                 <p:dialog id="newPersonDiag" header="Employee details" dynamic="true" modal="true" widgetVar="createDialog" height="180" width="450" resizable="false">
                     <p:panelGrid columns="2" id="panelNewEmp">
                         <h:outputLabel for="ID" value="ID:"/>

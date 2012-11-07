@@ -76,7 +76,6 @@ public class PeopleController implements Serializable {
         return result;
     }
     
-    
     public int getCantmployees()
     {
         int result = 0;
@@ -390,7 +389,22 @@ public class PeopleController implements Serializable {
   
         FacesContext.getCurrentInstance().addMessage(null, msg);  
     }  
-
+    
+    public void onDelete(RowEditEvent event) {
+        try {
+            logger.log(Level.INFO, "[{0}" + "] " + "onDelete being called", mngBean_ID);
+            getFacade().remove((People) event.getObject());
+            
+            //return "View";
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "[{0}" + "] " + "onDelete error... " + e.getMessage(), mngBean_ID);
+            JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
+            return;
+            //return null;
+        }
+        JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("PeopleUpdated"));
+    }  
+    
     @FacesConverter(forClass = People.class)
     public static class PeopleControllerConverter implements Converter {
 
