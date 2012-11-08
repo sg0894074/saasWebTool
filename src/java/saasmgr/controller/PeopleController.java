@@ -42,17 +42,18 @@ public class PeopleController implements Serializable {
     private boolean isForEditing;
     private boolean noRowSelected;
     private List<People> filteredPeople;
-
     private final static String[] roles;
+
     static {
         roles = new String[2];
         roles[0] = "Architect";
         roles[1] = "Project Manager";
     }
+
     public String[] getRoles() {
         return roles;
     }
-    
+
     public List<People> getFilteredPeople() {
         return filteredPeople;
     }
@@ -61,73 +62,61 @@ public class PeopleController implements Serializable {
         this.filteredPeople = filteredPeople;
     }
 
-    public int getMaxIDEmployees()
-    {
+    public int getMaxIDEmployees() {
         int result = 0;
-        try
-        {
+        try {
             result = ejbFacade.getMaxID();
-        }
-        catch(Exception e)
-        {
-            logger.log(Level.INFO,"[{0}" + "] " + "Error llamando a getMaxIDEmployees", mngBean_ID);
-            logger.log(Level.INFO,"[{0}" + "] " + "Error: "+ e.getMessage(), mngBean_ID);
+        } catch (Exception e) {
+            logger.log(Level.INFO, "[{0}" + "] " + "Error llamando a getMaxIDEmployees", mngBean_ID);
+            logger.log(Level.INFO, "[{0}" + "] " + "Error: " + e.getMessage(), mngBean_ID);
         }
         return result;
     }
-    
-    public int getCantmployees()
-    {
+
+    public int getCantmployees() {
         int result = 0;
-        try
-        {
+        try {
             result = ejbFacade.count();
-        }
-        catch(Exception e)
-        {
-            logger.log(Level.INFO,"[{0}" + "] " + "Error llamando a getCantmployees", mngBean_ID);
-            logger.log(Level.INFO,"[{0}" + "] " + "Error: "+ e.getMessage(), mngBean_ID);
+        } catch (Exception e) {
+            logger.log(Level.INFO, "[{0}" + "] " + "Error llamando a getCantmployees", mngBean_ID);
+            logger.log(Level.INFO, "[{0}" + "] " + "Error: " + e.getMessage(), mngBean_ID);
         }
         return result;
     }
-            
+
     public boolean getNoRowSelected() {
-        if(noRowSelected)
-        {
-            logger.log(Level.INFO,"[{0}" + "] " + "noRowSelected is True", mngBean_ID);
+        if (noRowSelected) {
+            logger.log(Level.INFO, "[{0}" + "] " + "noRowSelected is True", mngBean_ID);
+        } else {
+            logger.log(Level.INFO, "[{0}" + "] " + "noRowSelected is False", mngBean_ID);
         }
-        else
-        {
-            logger.log(Level.INFO,"[{0}" + "] " + "noRowSelected is False", mngBean_ID);
-        }
-        
+
         return noRowSelected;
     }
 
     public People getSelectedEmployee() {
         if (selectedEmployee == null) {
-            logger.log(Level.INFO,"[{0}" + "] " + "Initializing the selectedEmployee because it was null", mngBean_ID);
-            selectedEmployee = new People();
+            logger.log(Level.INFO, "[{0}" + "] " + "Initializing the selectedEmployee because it was null", mngBean_ID);
+            //selectedEmployee = new People();
             selectedItemIndex = -1;
         }
         return selectedEmployee;
     }
 
     public void setSelectedEmployee(People selectedEmployee) {
-        if(selectedEmployee == null){
-            logger.log(Level.INFO,"[{0}" + "] " + "Setting the selectedEmployee with null", mngBean_ID);
+        if (selectedEmployee == null) {
+            logger.log(Level.INFO, "[{0}" + "] " + "Setting the selectedEmployee with null", mngBean_ID);
+        } else {
+            logger.log(Level.INFO, "[{0}" + "] " + "Setting the selectedEmployee with " + selectedEmployee.getName(), mngBean_ID);
         }
-        else{
-            logger.log(Level.INFO,"[{0}" + "] " + "Setting the selectedEmployee with "+selectedEmployee.getName(), mngBean_ID);
-        }
-            
+
         this.selectedEmployee = selectedEmployee;
     }
 
     public boolean getIsForEditing() {
         return isForEditing;
     }
-    
+
     public boolean getIsForCreating() {
         return !isForEditing;
     }
@@ -137,17 +126,17 @@ public class PeopleController implements Serializable {
         selectedEmployee = null;
         mngBean_ID = (new java.util.Random()).nextInt();
         isForEditing = false;
-        logger.log(Level.INFO,"[{0}" + "] " + "Initializing the Bean with new ID", mngBean_ID);
+        logger.log(Level.INFO, "[{0}" + "] " + "Initializing the Bean with new ID", mngBean_ID);
     }
 
     public People getSelected() {
         if (selectedEmployee == null) {
-            selectedEmployee = new People();
+            //selectedEmployee = new People();
             selectedItemIndex = -1;
         }
         return selectedEmployee;
     }
-    
+
     public void setSelected(People selected) {
         selectedEmployee = selected;
     }
@@ -189,13 +178,13 @@ public class PeopleController implements Serializable {
 
     public void prepareCreate() {
         isForEditing = false;
-        if(!noRowSelected){
+        if (!noRowSelected) {
             this.onRowUnselect(null);
         }
         logger.log(Level.INFO, "[{0}" + "] " + "prepareCreate being called", mngBean_ID);
         this.selectedEmployee = new People();
         selectedItemIndex = -1;
-            //return "Create";
+        //return "Create";
     }
 
     public void create() {
@@ -219,7 +208,7 @@ public class PeopleController implements Serializable {
     public void prepareEdit() {
         isForEditing = true;
         logger.log(Level.INFO, "[{0}" + "] " + "prepareEdit being called", mngBean_ID);
-        logger.log(Level.INFO, "[{0}" + "] " + "with selectedEmployee "+this.selectedEmployee.getName(), mngBean_ID);
+        logger.log(Level.INFO, "[{0}" + "] " + "with selectedEmployee " + this.selectedEmployee.getName(), mngBean_ID);
         //current = (People) getItems().getRowData();
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         //return "Edit";
@@ -326,54 +315,47 @@ public class PeopleController implements Serializable {
         noRowSelected = false;
         selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
         logger.log(Level.INFO, "[{0}" + "] " + "SelectEvent being called", mngBean_ID);
-        if(selectedEmployee == null)
-        {
-            logger.log(Level.INFO,"[{0}" + "] " + "selectedEmployee is null!!", mngBean_ID);
-        }
-        else
-        {
-            logger.log(Level.INFO,"[{0}" + "] " + "selectedEmployee ID: "+ selectedEmployee.getIdEmployee() + " with index "+ selectedItemIndex, mngBean_ID);
+        if (selectedEmployee == null) {
+            logger.log(Level.INFO, "[{0}" + "] " + "selectedEmployee is null!!", mngBean_ID);
+        } else {
+            logger.log(Level.INFO, "[{0}" + "] " + "selectedEmployee ID: " + selectedEmployee.getIdEmployee() + " with index " + selectedItemIndex, mngBean_ID);
         }
         FacesMessage msg = new FacesMessage("Index Selected", selectedEmployee.getName());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
+        //FacesContext.getCurrentInstance().addMessage(null, msg);
     }
 
     public void onRowUnselect(UnselectEvent event) {
         noRowSelected = true;
-        logger.log(Level.INFO,"[{0}" + "] " + "UnselectEvent being called", mngBean_ID);
+        logger.log(Level.INFO, "[{0}" + "] " + "UnselectEvent being called", mngBean_ID);
         //FacesMessage msg = new FacesMessage("Person Unselected", ((People) event.getObject()).getIdEmployee().toString());
-        if(selectedEmployee == null)
-        {
-            logger.log(Level.INFO,"[{0}" + "] " + "selectedEmployee is null :)", mngBean_ID);
-        }
-        else
-        {
-            logger.log(Level.INFO,"[{0}" + "] " + "selectedEmployee!! with ID: "+ selectedEmployee.getIdEmployee(), mngBean_ID);
+        if (selectedEmployee == null) {
+            logger.log(Level.INFO, "[{0}" + "] " + "selectedEmployee is null :)", mngBean_ID);
+        } else {
+            logger.log(Level.INFO, "[{0}" + "] " + "selectedEmployee!! with ID: " + selectedEmployee.getIdEmployee(), mngBean_ID);
         }
         //this.selectedEmployee = null;
         //FacesContext.getCurrentInstance().addMessage(null, msg);
     }
-    
+
     public void onShowing() {
-        logger.log(Level.INFO,"[{0}" + "] " + "onShowing being called with selected emplyee", mngBean_ID);
-        try{
-            logger.log(Level.INFO,"[{0}" + "] " + selectedEmployee.getName(), mngBean_ID);
+        logger.log(Level.INFO, "[{0}" + "] " + "onShowing being called with selected emplyee", mngBean_ID);
+        try {
+            logger.log(Level.INFO, "[{0}" + "] " + selectedEmployee.getName(), mngBean_ID);
+        } catch (Exception e) {
+            logger.log(Level.INFO, "[{0}" + "] " + "Error during onShowing... " + e.getMessage(), mngBean_ID);
         }
-        catch(Exception e){
-            logger.log(Level.INFO,"[{0}" + "] " + "Error during onShowing... "+e.getMessage(), mngBean_ID);
-        }
-            
+
         //FacesMessage msg = new FacesMessage("Person Unselected", ((People) event.getObject()).getIdEmployee().toString());
         //FacesMessage msg = new FacesMessage("Person selected2", selectedEmployee.getName());
         //this.selectedEmployee = null;
         //FacesContext.getCurrentInstance().addMessage(null, msg);
     }
-    
+
     public void onEdit(RowEditEvent event) {
         try {
             logger.log(Level.INFO, "[{0}" + "] " + "onEdit being called", mngBean_ID);
             getFacade().edit((People) event.getObject());
-            
+
             //return "View";
         } catch (Exception e) {
             logger.log(Level.SEVERE, "[{0}" + "] " + "onEdit error... " + e.getMessage(), mngBean_ID);
@@ -382,29 +364,35 @@ public class PeopleController implements Serializable {
             //return null;
         }
         JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("PeopleUpdated"));
-    }  
-      
-    public void onCancel(RowEditEvent event) {  
+    }
+
+    public void onCancel(RowEditEvent event) {
         FacesMessage msg = new FacesMessage("Employee Cancelled", (((People) event.getObject()).getIdEmployee()).toString());
-  
-        FacesContext.getCurrentInstance().addMessage(null, msg);  
-    }  
-    
-    public void onDelete(RowEditEvent event) {
-        try {
-            logger.log(Level.INFO, "[{0}" + "] " + "onDelete being called", mngBean_ID);
-            getFacade().remove((People) event.getObject());
-            
-            //return "View";
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, "[{0}" + "] " + "onDelete error... " + e.getMessage(), mngBean_ID);
-            JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
-            return;
-            //return null;
+
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    }
+
+    public void onDelete() {
+        if (selectedEmployee==null) {
+            JsfUtil.addErrorMessage("Seleccioná una row papá");
+        } else {
+            try {
+                logger.log(Level.INFO, "[{0}" + "] " + "onDelete being called", mngBean_ID);
+                getFacade().remove(this.selectedEmployee);
+                selectedEmployee = null;
+                this.prepareList();
+            } //return "View";
+            catch (Exception e) {
+                logger.log(Level.SEVERE, "[{0}" + "] " + "onDelete error... " + e.getMessage(), mngBean_ID);
+                JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
+                return;
+                //return null;
+            }
+            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("PeopleUpdated"));
         }
-        JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("PeopleUpdated"));
-    }  
-    
+
+    }
+
     @FacesConverter(forClass = People.class)
     public static class PeopleControllerConverter implements Converter {
 
